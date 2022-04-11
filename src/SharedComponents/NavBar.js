@@ -6,7 +6,9 @@ function NavBar(props) {
       <ul>
         <li><a href='/'>Home</a></li>
         {props.classes.map((className, idx) =>
-          <li><a href={ '/'+className }>{ className }</a></li>
+          <li key={ idx }>
+            <a href={ '/'+className }>{ className }</a>
+          </li>
         )}
       </ul>
     </div>
