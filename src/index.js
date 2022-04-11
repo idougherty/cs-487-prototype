@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ClassPage from './ClassPage';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
@@ -16,17 +16,20 @@ let classes = [
 
 const navBar = <NavBar classes={ classes } />
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = createRoot(container);
+root.render(
   <React.StrictMode>
     <Router>
       <Routes>
         <Route path="/login" element={ <LoginPage/> }/>
         <Route path="/" element={ <HomePage navBar={ navBar } /> }/>
-        {classes.map(className =>
-          <Route path={ "/"+className } element={ <ClassPage navBar={ navBar } className={ className }/> }/>
+        {classes.map((className, idx) =>
+          <Route key={ idx } 
+                 path={ "/"+className } 
+                 element={ <ClassPage navBar={ navBar } className={ className }/> }/>
         )}
       </Routes>
     </Router>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
