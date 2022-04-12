@@ -23,11 +23,15 @@ const testEvents = [
 
 function HomePage(props) {
   return (
-    <div>
+    <div className='app-page'>
       <Header subheader="Home"/>
-      { props.navBar }
-      <EventList events={ testEvents }/>
-      <Calendar />
+      <div className='columns app-body'>
+        { props.navBar }
+        <div className='columns app-content'>
+          <EventList events={ testEvents }/>
+          <Calendar className='column is-three-fifths' />
+        </div>
+      </div>
     </div>
   );
 }

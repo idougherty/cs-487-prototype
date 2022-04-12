@@ -2,8 +2,9 @@ import './NavBar.css';
 
 function NavBar(props) {
   return (
-    <div>
-      <ul>
+    <aside className='menu column is-narrow-widescreen'>
+      <p className='menu-label'>Classes</p>
+      <ul className="menu-list">
         <li><a href='/'>Home</a></li>
         {props.classes.map((className, idx) =>
           <li key={ idx }>
@@ -11,7 +12,7 @@ function NavBar(props) {
           </li>
         )}
       </ul>
-    </div>
+    </aside>
   );
 }
 

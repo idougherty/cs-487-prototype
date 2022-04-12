@@ -1,0 +1,12 @@
+.app-body {
+    height: calc(100vh - 60px);
+}
+
+.app-content {
+    width: 100%;
+    height: 100%;
+}
+
+.menu {
+    border-right: 1px solid #ddd;
+}

@@ -2,7 +2,7 @@ import "./EventList.css";
 
 function EventList(props) {
     return (
-        <div>
+        <div className='column is-two-fifths'>
             <h2>Upcoming Events</h2>
             <ul>
                 {props.events.map((event, idx) => 
