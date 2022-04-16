@@ -10,3 +10,11 @@
 .menu {
     border-right: 1px solid #ddd;
 }
+
+.columns {
+    margin: 0;
+}
+
+.narrow {
+    width: max-content;
+}

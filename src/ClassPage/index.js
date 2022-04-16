@@ -1,26 +1,13 @@
 import Header from '../SharedComponents/Header';
-import ChatList from './ChatList';
+import NavBar from '../SharedComponents/NavBar';
 import './index.css';
-
-const chats = [
-  {
-    name: "General"
-  },
-  {
-    name: "Assignments"
-  },
-  {
-    name: "Resouce Hub"
-  },
-];
 
 function ClassPage(props) {
   return (
     <div className='app-page'>
       <Header subheader={ props.className } />
-      <div className='columns app-body'>
-        { props.navBar }
-        <ChatList chats={ chats } />
+      <div className='columns is-mobile app-body'>
+        <NavBar classes={ props.classes } currentClass={ props.className } />
         <div className='app-content'>
           <h1>~ Chat Placeholder ~</h1>
         </div>

@@ -1,7 +1,8 @@
 import Calendar from './Calendar';
 import Header from '../SharedComponents/Header'
-import './index.css';
 import EventList from './EventList';
+import NavBar from '../SharedComponents/NavBar';
+import './index.css';
 
 const testEvents = [
   {
@@ -25,11 +26,11 @@ function HomePage(props) {
   return (
     <div className='app-page'>
       <Header subheader="Home"/>
-      <div className='columns app-body'>
-        { props.navBar }
-        <div className='columns app-content'>
+      <div className='columns is-mobile app-body'>
+        <NavBar classes={ props.classes } />
+        <div className='column columns is-mobile app-content'>
           <EventList events={ testEvents }/>
-          <Calendar className='column is-three-fifths' />
+          <Calendar />
         </div>
       </div>
     </div>

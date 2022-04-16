@@ -1,36 +1,26 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import ClassPage from './ClassPage';
-import HomePage from './HomePage';
-import LoginPage from './LoginPage';
-import NavBar from './SharedComponents/NavBar';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-import "./index.css"
+import App from './App.js';
+import "./index.css";
 
-let testClasses = [
-  "CS-487", "CS-440", "PHYS-221", "MATH-332"
-];
+import { initializeApp } from "firebase/app";
 
-const navBar = <NavBar classes={ testClasses } />
+const firebaseConfig = {
+  apiKey: "AIzaSyDDzGqRjfilxS6WZRsEiLXC9uWGS7oOBxk",
+  authDomain: "cs-487-prototype.firebaseapp.com",
+  projectId: "cs-487-prototype",
+  storageBucket: "cs-487-prototype.appspot.com",
+  messagingSenderId: "68695942075",
+  appId: "1:68695942075:web:0b51d531a59ba488065a9e",
+  measurementId: "G-C1KZ9E9PVL"
+};
+
+const app = initializeApp(firebaseConfig);
 
 const container = document.getElementById('app');
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-      <Router>
-        <Routes>
-          <Route path="/login" element={ <LoginPage/> }/>
-          <Route path="/" element={ <HomePage navBar={ navBar } /> }/>
-          {testClasses.map((className, idx) =>
-            <Route key={ idx } 
-            path={ "/"+className } 
-            element={ <ClassPage navBar={ navBar } className={ className }/> }/>
-            )}
-        </Routes>
-      </Router>
+    <App />
   </React.StrictMode>
 );
