@@ -1,5 +1,17 @@
+body {
+    margin: 0;
+}
+
+html {
+    overflow: auto;
+}
+
+.app-page {
+    height: 100vh;
+}
+
 .app-body {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 70px);
 }
 
 .app-content {
@@ -15,6 +27,7 @@
     margin: 0;
 }
 
-.narrow {
+.is-narrow {
     width: max-content;
+    min-width: 100px;
 }

@@ -1,97 +1,69 @@
-import React, { useMemo, useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { 
+    collection, 
+    getDoc,
+    getDocs,
+} from 'firebase/firestore';
+import { db } from './firebase'
+import Header from './SharedComponents/Header'
+import NavBar from './SharedComponents/NavBar';
 import ClassPage from './ClassPage';
 import HomePage from './HomePage';
-import LoginPage from './LoginPage';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-
-import { getAuth } from 'firebase/auth';
-import AuthContext from './SharedComponents/AuthContext';
-
-let testClasses = [
-  {
-    name: "CS-487",
-    channels: [
-      { name: "General" },
-      { name: "Assignments" },
-      { name: "Resouce Hub" },
-    ],
-  },
-  {
-    name: "CS-440",
-    channels: [
-      { name: "General" },
-      { name: "Assignments" },
-      { name: "Resouce Hub" },
-    ],
-  },
-  {
-    name: "PHYS-221",
-    channels: [
-      { name: "General" },
-      { name: "Assignments" },
-      { name: "Resouce Hub" },
-    ],
-  },
-  {
-    name: "MATH-332",
-    channels: [
-      { name: "General" },
-      { name: "Assignments" },
-      { name: "Resouce Hub" },
-    ],
-  },
-];
+import UserContext from './SharedComponents/UserContext';
 
 function App() {
-  const [[isAuth, auth], setAuth] = useState([null, getAuth()]);
-  const [loadingAuth, setLoadingAuth] = useState(true);
+    const [tab, setTab] = useState("Home");
+    const [classes, setClasses] = useState([]);
+    const [channel, setChannel] = useState(null);
+    const {user} = useContext(UserContext);
 
-  const value = useMemo(
-    () => ({ auth, setAuth }),
-    [auth]
-  );
+    useEffect(() => {
+        let getClasses = async () => {
+            let courses = [];
 
-  auth.onAuthStateChanged((user) => {
-    setLoadingAuth(false);
+            for(const course of user.data.courses) {
+                const doc = await getDoc(course);
+                const data = doc.data();
+                data.id = doc.id;
+                
+                const query = collection(db, "Courses", data.id, "Channels");
+                const channelSnapshot = await getDocs(query);
 
-    if(user && !isAuth) {
-      setAuth([true, user.auth]);
-    }
-  });
+                data.channels = channelSnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    return data;
+                });
 
-  if(loadingAuth)
-    return <h1>Loading...</h1>
+                courses.push(data);
+            }
+            
+            setClasses(courses);
+        }
+            
+        getClasses();
+    }, []);
 
-  return (
-    <AuthContext.Provider value={ value }>
-      <Router>
-        <Routes>
-          {
-            isAuth ?
-            <>  
-              <Route path="/" element={ <HomePage classes={ testClasses } /> }/>
-              {testClasses.map((clss, idx) =>
-                <Route key={ idx } 
-                path={ "/"+clss.name } 
-                element={ <ClassPage classes={ testClasses } className={ clss.name }/> }/>
-                )}  
-              <Route path="*" element={ <Navigate to="/" /> } />
-            </>
-            : 
-            <>
-              <Route path="/login" element={ <LoginPage/> }/>
-              <Route path="*" element={ <Navigate to="/login" /> } />
-            </>
-          }
-        </Routes>
-      </Router>
-    </AuthContext.Provider>
-  );
+    return (        
+        <div className='app-page'>
+            <Header subheader={ tab }/>
+            <div className='columns is-mobile app-body'>
+                <NavBar classes={ classes }
+                        setClasses={ setClasses }
+                        setTab={ setTab }
+                        setChannel={ setChannel }
+                        currentPage={ tab } />
+                <div className='column'>
+                    { tab === "Home" ? 
+                        <HomePage /> 
+                        : 
+                        <ClassPage class={ classes.find(c => c.name === tab) }
+                                   channel={ channel } /> 
+                    }
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default App;
