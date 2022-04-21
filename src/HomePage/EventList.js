@@ -1,18 +1,14 @@
 import "./EventList.css";
+import Event from './Event'
 
-function EventList(props) {
+const EventList = ({events, onDelete, onToggle}) => {
     return (
-        <div className='column is-two-fifths'>
-            <h2>Upcoming Events</h2>
-            <ul>
-                {props.events.map((event, idx) => 
-                    <li key={ idx }>
-                        { event.class }: { event.title }, { event.date.toDateString() }
-                    </li>
-                )}
-            </ul>
-        </div>
+        <>
+            {events.map( 
+                (event) => ( <Event key={event.id} event={event} onDelete={onDelete} onToggle={onToggle} /> )
+            )}
+        </>
     )
 }
 
-export default EventList;
+export default EventList
