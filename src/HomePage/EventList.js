@@ -5,7 +5,7 @@ const EventList = ({events, onDelete, onToggle}) => {
     return (
         <>
             {events.map( 
-                (event) => ( <Event key={event.id} event={event} onDelete={onDelete} onToggle={onToggle} /> )
+                (event, idx) => ( <Event key={idx} event={event} onDelete={onDelete} onToggle={onToggle} /> )
             )}
         </>
     )

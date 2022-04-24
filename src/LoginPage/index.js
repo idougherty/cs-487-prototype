@@ -50,6 +50,7 @@ function LoginPage() {
           email: email,
           userType: userType,
           courses: [],
+          events: [],
         }
 
         setDoc(doc(db, "Users", userCredential.user.uid), userData);

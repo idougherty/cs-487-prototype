@@ -2,15 +2,22 @@ import './index.css';
 import EventList from "./EventList";
 import Header from "./Header";
 
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import {useState} from 'react'
 import "./Calendar.css";
 import {Calendar as ReactCalendar} from 'react-calendar';
+import UserContext from '../SharedComponents/UserContext';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 
 var store = require('store')
 
 function HomePage(props) {
+  const {user} = useContext(UserContext);
+  const [events, setEvents] = useState([])
+  const [showAddEvent, setshowAddEvent] = useState(false)
+
   //Get each object stored and make a list from it
   const getStoredEvents = () => {
     var eventList = []
@@ -20,25 +27,53 @@ function HomePage(props) {
     return eventList
   }
 
-  const [events, setEvents] = useState( getStoredEvents() )
+  const getEvents = async () => {
+    let events = [];
 
-  const [showAddEvent, setshowAddEvent] = useState(false)
+    for(const course of user.data.events) {
+      const doc = await getDoc(course);
+      const eventData = doc.data();
+      eventData.id = doc.id;
+      events.push(eventData);
+    }
+    
+    console.log(events);
+    setEvents(events);
+  } 
 
-  /* Add Event */
-  const addEvent = (event) => {
-    const id = Math.floor(Math.random() * 50000) + 1 //for now, I just generate a random id
-    const newEvent = {id, ...event}
-    setEvents( [...events, newEvent] )
-    store.set(id, newEvent)
-    //The add event section will close after the user adds a event.
-    //If you want the addEvent to remain open, remove the setshowAddEvent below.
-    setshowAddEvent(false)
-  }
+  const addEvent = async (eventData) => {
+    const eventRef = doc(collection(db, "Events"));
+
+    await setDoc(eventRef, eventData);
+
+    eventData.id = eventRef.id;
+    user.data.events.push(eventData);
+
+    await updateDoc(doc(db, "Users", user.uid), {
+        events: arrayUnion(eventRef),
+    });
+
+    setEvents([...events, eventData]);
+    
+    return props.classes;
+  } 
+
+  useEffect(() => {
+    getEvents();
+
+  }, []);
 
   /* Delete Event function that takes a event id as an argument */
   const deleteEvent = (id) => {
+    console.log(id);
+    const eventRef = doc(db, "Events", id);
+    
+    deleteDoc(eventRef);
+    updateDoc(doc(db, "Users", user.uid), {
+      events: arrayRemove(eventRef),
+    });
+    
     setEvents(events.filter( (event) => event.id !== id ))
-    store.remove(id)
   }
 
   /* Toggle reminder */
@@ -46,8 +81,6 @@ function HomePage(props) {
     console.log(id)
     setEvents(events.map( (event) => event.id === id ? { ...event, reminder: !event.reminder} : event ))
   }
-
-
 
   /* Date components */
   const [text, setText] = useState('')
@@ -70,7 +103,6 @@ function HomePage(props) {
       setYear(2022)
   }
 
-
   //Date states
   const [dateState, setDateState] = useState(new Date());
 
@@ -85,7 +117,6 @@ function HomePage(props) {
     return <p></p>
   }
 
-
   //When a date on the calendar is selected, open the add event with the date filled in
   function onChange(e) {
       setDateState(e);
@@ -95,8 +126,6 @@ function HomePage(props) {
       setYear(e.getFullYear())
       setshowAddEvent(true);
   }
-
-
 
   return (
   <div className="appContainer">
