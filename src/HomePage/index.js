@@ -11,7 +11,7 @@ import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, setDoc, up
 import { db } from '../firebase';
 
 
-var store = require('store')
+// var store = require('store')
 
 function HomePage(props) {
   const {user} = useContext(UserContext);
@@ -19,13 +19,13 @@ function HomePage(props) {
   const [showAddEvent, setshowAddEvent] = useState(false)
 
   //Get each object stored and make a list from it
-  const getStoredEvents = () => {
-    var eventList = []
-    store.each(function(value, key) {
-      eventList = [...eventList, store.get(key)] 
-    })
-    return eventList
-  }
+  // const getStoredEvents = () => {
+  //   var eventList = []
+  //   store.each(function(value, key) {
+  //     eventList = [...eventList, store.get(key)] 
+  //   })
+  //   return eventList
+  // }
 
   const getEvents = async () => {
     let events = [];

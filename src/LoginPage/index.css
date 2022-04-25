@@ -1,0 +1,26 @@
+.login-container {
+    width: max-content;
+    margin: 10vh auto;
+}
+
+.form-log-in, .form-sign-up {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+}
+
+.field label {
+    width: 25%;
+}
+
+.field .control {
+    width: 75%;
+}
+
+.login-container .button {
+    width: 100%;    
+}

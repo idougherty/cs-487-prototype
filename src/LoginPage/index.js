@@ -61,10 +61,18 @@ function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>Welcome to Class Connect!</h1>
-      <button onClick={ () => setTab("log in") }>Log In</button>
-      <button onClick={ () => setTab("sign up") }>Sign Up</button>
+    <div className='login-container'>
+      <h1 className='title is-3'>Welcome to Class Connect!</h1>
+      <div className='tabs is-centered'>
+        <ul>
+          <li className={tab == "log in" && "is-active"}>
+            <button className='button' onClick={ () => setTab("log in") }>Log In</button>
+          </li>
+          <li className={tab == "log in" && "is-active"}>
+            <button className='button' onClick={ () => setTab("sign up") }>Sign Up</button>
+          </li>
+        </ul>
+      </div>
       {(tab === "log in")
         ? <LoginForm handler={ handleLogin }/> 
         : <SignUpForm handler={ handleSignUp }/>}
@@ -76,11 +84,20 @@ function LoginPage() {
 function LoginForm(props) {
   return (
     <form className="form-log-in" onSubmit={ props.handler }>
-      <label htmlFor="email">Email:</label>
-      <input type="text" id="email" name="email"/> <br/>
-      <label htmlFor="password">Password:</label>
-      <input type="password" id="password" name="password"/> <br/>
-      <button type='submit'>Log In</button>
+      <div className='field'>
+        <label htmlFor="email">Email:</label>
+        <div className='control'>
+          <input className='input' type="text" id="email" name="email"/>
+        </div>
+      </div>
+      
+      <div className='field'>
+        <label htmlFor="password">Password:</label>
+        <div className='control'>
+          <input className='input' type="password" id="password" name="password"/>
+        </div>
+      </div>
+      <button className="button is-link" type='submit'>Log In</button>
     </form>
   );
 }
@@ -88,22 +105,51 @@ function LoginForm(props) {
 function SignUpForm(props) {
   return (
     <form className="form-sign-up" onSubmit={ props.handler }>
-      <label htmlFor="userType">User Type:</label>
-      <select id="userType" name="userType">
-        <option value="student">Student</option>
-        <option value="teacher">Teacher</option>
-      </select> <br/>
-      <label htmlFor="fname">First Name:</label>
-      <input type="text" id="fname" name="fname"/> <br/>
-      <label htmlFor="lname">Last Name:</label>
-      <input type="text" id="lname" name="lname"/> <br/>
-      <label htmlFor="email">Email:</label>
-      <input type="text" id="email" name="email"/> <br/>
-      <label htmlFor="password">Password:</label>
-      <input type="password" id="password" name="password"/> <br/>
-      <label htmlFor="cpassword">Confirm Password:</label>
-      <input type="password" id="cpassword" name="cpassword"/> <br/>
-      <button type='submit'>Sign Up</button>
+      <div className='field'>
+        <label htmlFor="userType">User Type:</label>
+        <div className='control'>
+          <select className='select' id="userType" name="userType">
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+          </select>
+        </div>
+      </div>
+      
+      <div className='field'>
+        <label htmlFor="fname">First Name:</label>
+        <div className='control'>
+          <input className='input' type="text" id="fname" name="fname"/>
+        </div>
+      </div>
+      
+      <div className='field'>
+        <label htmlFor="lname">Last Name:</label>
+        <div className='control'>
+          <input className='input' type="text" id="lname" name="lname"/>
+        </div>
+      </div>
+      
+      <div className='field'>
+        <label htmlFor="email">Email:</label>
+        <div className='control'>
+          <input className='input' type="text" id="email" name="email"/>
+        </div>
+      </div>
+      
+      <div className='field'>
+        <label htmlFor="password">Password:</label>
+        <div className='control'>
+          <input className='input' type="password" id="password" name="password"/>
+        </div>
+      </div>
+      
+      <div className='field'>
+        <label htmlFor="cpassword">Confirm Password:</label>
+        <div className='control'>
+          <input className='input' type="password" id="cpassword" name="cpassword"/>
+        </div>
+      </div>
+      <button className='button is-link' type='submit'>Sign Up</button>
     </form>
   );
 }
