@@ -23,6 +23,23 @@
     width: 50%;
 }
 
+.msg.deletable:hover {
+    background-color: #0001;
+}
+
+.msg.deletable:hover .msg-delete-icon {
+    visibility: visible;
+}
+
+.msg-delete-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    visibility: hidden;
+}
+
 .msg-name {
     font-weight: bold;
 }
@@ -34,4 +51,6 @@
 
 .msg {
     margin-bottom: 10px;
+    padding: 5px;
+    position: relative;
 }

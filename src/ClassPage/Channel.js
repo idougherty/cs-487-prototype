@@ -1,8 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { db } from '../firebase'; 
-import { collection, query, onSnapshot, doc, addDoc, orderBy, limit } from 'firebase/firestore';
+import { collection, query, onSnapshot, doc, addDoc, orderBy, limit, deleteDoc } from 'firebase/firestore';
 import UserContext from "../SharedComponents/UserContext";
 import './Channel.css';
+import {FaTrash} from 'react-icons/fa'
 
 const dateString = (date) => {
     return date.getUTCFullYear() + "/" +
@@ -34,13 +35,36 @@ function Channel(props) {
         });
     }
 
+    const deleteMsg = (msg) => {
+        if(user.data.userType != "teacher")
+            return;
+
+        console.log(msg);
+
+        const messageRef = doc(
+            db, 
+            "Courses", 
+            props.class.id, 
+            "Channels", 
+            props.channel.id, 
+            "Messages",
+            msg.id
+        );
+
+        deleteDoc(messageRef);
+    }
+
     const copylink = () => {
         navigator.clipboard.writeText(window.location + "Courses/" + props.class.id);;
     }
 
     useEffect(() => {
         const unsub = onSnapshot(query(messageCollection, orderBy("date"), limit(25)), (snapshot) => {
-            const msgs = snapshot.docs.map(doc => doc.data());
+            const msgs = snapshot.docs.map(doc => {
+                const data = doc.data();
+                data.id = doc.id;
+                return data;
+            });
             setMessages(msgs);
         });
 
@@ -68,12 +92,13 @@ function Channel(props) {
             <div className="message-list" id="messageList">
                 <ul>
                     {messages.map((message, idx) =>
-                        <li key={ idx } className="msg">
+                        <li key={ idx } className={"msg" + (user.data.userType == "teacher" ? " deletable" : "")}>
                             <p>
                                 <span className="msg-name">{ message.userName }</span>&nbsp;
                                 <span className="msg-date">{ dateString(message.date.toDate()) }</span>
                             </p>
                             <p className="msg-text">{ message.text }</p>
+                            <FaTrash className="msg-delete-icon" onClick={() => deleteMsg(message)}></FaTrash>
                         </li>
                     )}
                     <li ref={scrollTo}></li>

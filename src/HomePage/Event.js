@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {FaTimes, FaClipboard, FaClipboardCheck} from 'react-icons/fa'
+import {FaTimes, FaClipboard, FaClipboardCheck} from 'react-icons/fa';
 
 const Event = ({event, onDelete, onToggle}) => {
     const [copied, setCopied] = useState(false);
